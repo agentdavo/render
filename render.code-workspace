@@ -1,0 +1,105 @@
+{
+    // https://code.visualstudio.com/docs/editor/workspaces
+    // https://code.visualstudio.com/docs/editor/multi-root-workspaces
+    // https://code.visualstudio.com/docs/editor/variables-reference
+
+    "folders": [
+        {
+            "path": "."
+        }
+    ],
+    // extensions.json section
+    "extensions": {
+        "recommendations": [
+            "ms-vscode.cpptools",              // common C/C++ support
+            "ms-vscode.cpptools-themes",       // general C/C++ theme
+            "ms-vscode.cmake-tools"            // cmake support
+        ],
+        "unwantedRecommendations": []
+    },
+    // settings.json section
+    "settings": {
+        "files.trimTrailingWhitespace": true,
+        "files.insertFinalNewline": true,
+        "files.trimFinalNewlines": true,
+        "cmake.configureOnOpen": true,
+        "files.associations": {
+        }
+    },
+    // tasks.json section
+    "tasks": {
+        "version": "2.0.0",
+        "tasks": [
+            {
+				"type": "cmake",
+				"label": "CMake: build",
+				"command": "build",
+				"targets": [
+				"all"
+				],
+				"group": "build",
+				"problemMatcher": [],
+				"detail": "CMake template build task"
+
+            },
+            {
+                "label": "Build and Run",
+                "type": "shell",
+                "command": "${workspaceFolder}/build/render",
+                "group": {
+                    "kind": "test",
+                    "isDefault": true
+                },
+                "dependsOn": "Build"
+            }
+        ]
+    },
+    // launch.json section
+    "launch": {
+        "version": "0.2.0",
+        "configurations": [
+            {
+                "name": "Debug with gdb",
+                "type": "cppdbg",
+                "request": "launch",
+                "program": "${workspaceFolder}/build/render",
+                "args": [],
+                "cwd": "${workspaceFolder}",
+                "preLaunchTask": "Build",
+                "stopAtEntry": false,
+                "linux": {
+                    "MIMode": "gdb",
+                    "miDebuggerPath": "/usr/bin/gdb"
+                },
+                "osx": {
+                    "MIMode": "lldb"
+                },
+                "windows": {
+                    "MIMode": "gdb",
+                    "miDebuggerPath": "C:\\MinGw\\bin\\gdb.exe"
+                },
+                "setupCommands": [
+                    {
+                      "description": "Enable pretty-printing for gdb",
+                      "text": "-enable-pretty-printing",
+                      "ignoreFailures": true
+                    },
+                    {
+                      "description": "Ignore stepping into system libraries",
+                      "text": "set auto-load-scripts off"
+                    }
+                ]
+            },
+            {
+                "name": "Debug with LLVM",
+                "type": "cppdbg",
+                "request": "launch",
+                "program": "${workspaceFolder}/build/render",
+                "cwd": "${workspaceFolder}",
+                "preLaunchTask": "Build",
+                "stopAtEntry": false,
+
+            }
+        ]
+    }
+}
